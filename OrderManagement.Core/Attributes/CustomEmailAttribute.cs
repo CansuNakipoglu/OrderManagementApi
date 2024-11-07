@@ -1,0 +1,24 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
+namespace OrderManagement.Core.Attributes
+{
+    public class CustomEmailAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            var email = value as string;
+            if (string.IsNullOrEmpty(email))
+            {
+                return new ValidationResult("Email is required.");
+            }
+
+            var emailRegex = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            if (!emailRegex.IsMatch(email))
+            {
+                return new ValidationResult("Invalid email format. Please provide a valid email address.");
+            }
+
+            return ValidationResult.Success;
+        }
+    }
+}
